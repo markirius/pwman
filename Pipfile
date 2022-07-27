@@ -8,6 +8,7 @@ django = "4"
 
 [dev-packages]
 django-extensions = "*"
+ipython = "*"
 
 [requires]
 python_version = "3.9"

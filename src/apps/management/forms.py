@@ -1,4 +1,5 @@
-from django.forms import PasswordInput, ModelForm
+from django.forms import ModelForm, PasswordInput
+
 from apps.management.models import PassDB
 
 
@@ -8,4 +9,5 @@ class PassDBForm(ModelForm):
         widgets = {
             "password": PasswordInput(),
         }
-        fields = ["name", "login", "password"]
+        fields = ["name", "login", "password", "group"]
+
