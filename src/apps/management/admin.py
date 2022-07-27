@@ -12,8 +12,7 @@ class PassDBAdmin(admin.ModelAdmin):
     list_display = (
         "name",
         "login",
-        "password",
-        "reveal",
+        "decrypted_password",
         "group"
     )
     search_fields = ["name"]
@@ -29,11 +28,20 @@ class PassDBAdmin(admin.ModelAdmin):
         return PassDB.objects.filter(group=request.user.groups.all().first())
 
     def reveal(self, obj):
+        '''
+        disabled becouse there\'s no need to convert values on admin
+        '''
         return format_html(
             '''
             <a class="button" href="javascript:alert('Conta: {}
             \\nSenha: {}');">Password</a>
-            ''', obj.login, passEncr('decrypt', obj.password))
+            ''',
+            obj.login,
+            passEncr('decrypt', obj.password)
+        )
+
+    def decrypted_password(self, obj):
+        return passEncr('decrypt', obj.password)
 
 
 admin.site.register(PassDB, PassDBAdmin)
