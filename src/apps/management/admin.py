@@ -43,5 +43,10 @@ class PassDBAdmin(admin.ModelAdmin):
     def decrypted_password(self, obj):
         return passEncr('decrypt', obj.password)
 
+    def save_model(self, request, obj, form, change):
+        if not obj.user:
+            obj.user = request.user
+            obj.save()
+
 
 admin.site.register(PassDB, PassDBAdmin)

@@ -9,5 +9,4 @@ class PassDBForm(ModelForm):
         widgets = {
             "password": PasswordInput(),
         }
-        fields = ["name", "login", "password", "group"]
-
+        fields = ["name", "login", "password", "user", "group"]
