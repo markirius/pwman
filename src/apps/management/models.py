@@ -11,8 +11,13 @@ class PassDB(models.Model):
         verbose_name = 'Password'
 
     name = models.CharField(max_length=100)
+    url = models.CharField(
+            max_length=150,
+            null=True,
+            blank=True
+        )
     login = models.CharField(max_length=50)
-    password = models.CharField(max_length=100)
+    password = models.CharField(max_length=255)
     user = models.ForeignKey(
             User,
             on_delete=models.DO_NOTHING,

@@ -4,13 +4,14 @@ from django.utils.html import format_html
 from apps.management.forms import PassDBForm
 from apps.management.functions import passEncr
 from apps.management.models import PassDB
-
+from django.db.models import Q
 
 class PassDBAdmin(admin.ModelAdmin):
     # TODO: https://hakibenita.medium.com/how-to-add-custom-action-buttons-to-django-admin-8d266f5b0d41#.5sc9oa4yf
     form = PassDBForm
     list_display = (
         "name",
+        "url",
         "login",
         "decrypted_password",
         "group"
@@ -18,18 +19,17 @@ class PassDBAdmin(admin.ModelAdmin):
     search_fields = ["name"]
 
     def get_queryset(self, request):
-        # TODO: request.user.groups.all()
-        #import pdb
-        #pdb.set_trace()
         if request.user.is_superuser:
             # can be returned None to avoid superuser to access all storaged
             # passwords
-            return PassDB.objects.all()
-        return PassDB.objects.filter(group=request.user.groups.all().first())
+            return None
+        return PassDB.objects.filter(
+                Q(group__in=request.user.groups.all()) | Q(user=request.user)
+            );
 
     def reveal(self, obj):
         '''
-        disabled becouse there\'s no need to convert values on admin
+        disabled because there\'s no need to convert values on admin
         '''
         return format_html(
             '''
@@ -47,6 +47,7 @@ class PassDBAdmin(admin.ModelAdmin):
         if not obj.user:
             obj.user = request.user
             obj.save()
+        obj.save()
 
 
 admin.site.register(PassDB, PassDBAdmin)
